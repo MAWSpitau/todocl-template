@@ -19,11 +19,11 @@ This should be a small script for using **templates** for todo-cli
 
 #### Example
 
-> (A) Do that! +myproject @computer +5
->  |  |         |           |         |--- This should be done in 5 days from
->  |  |         |           |              (-duer) a relative date or (-duet)
->  |  |         |           |              from today.
->  |  |         |           |--- this is a context
->  |  |         |--- this is a project
->  |  |--- the task
->  |--- the priority
+  (A) Do that! +myproject @computer +5
+   |  |         |           |         |--- This should be done in 5 days from
+   |  |         |           |              (-duer) a relative date or (-duet)
+   |  |         |           |              from today.
+   |  |         |           |--- this is a context
+   |  |         |--- this is a project
+   |  |--- the task
+   |--- the priority
