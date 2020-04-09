@@ -18,7 +18,7 @@ This should be a small script for using **templates** for todo-cli
 - You can choose when the tasks due-date is.
 
 #### Example
-
+'''
   (A) Do that! +myproject @computer +5
    |  |         |           |         |--- This should be done in 5 days from
    |  |         |           |              (-duer) a relative date or (-duet)
@@ -27,3 +27,4 @@ This should be a small script for using **templates** for todo-cli
    |  |         |--- this is a project
    |  |--- the task
    |--- the priority
+'''
