@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+#===============================================================================
+#
+#          FILE: tmplt
+#
+#         USAGE: todo.sh tmplt
+#
+#   DESCRIPTION: Enables templates for recurring tasks in todo.sh
+#
+#  REQUIREMENTS: ---
+#          BUGS:
+#        AUTHOR: Marcel Spitau (mawspitau@gmail.com)
+#     COPYRIGHT: 2020 Paul Mansfield
+#       LICENSE: WTFPL - http://www.wtfpl.net/about/
+#       CREATED: 2020-04-07
+#      REVISION:  ---
+#===============================================================================
+
+# Hier auskommentieren für debugging.
+# DEBUG="=====>>>- DEBUGGING:" && clear && TODO_FILE="./loeschmich.txt"
+# USAGE:
+# [[ $DEBUG ]] && echo ${DEBUG} "Nachricht"
+
+tmpltdir="$TODO_DIR/tmplt"  # Wo werden die templates gesucht un${TODO_FILE}d gespeichert.
+today=`date +%Y-%m-%d`      # Welcher tag ist heute?
+
+# Sprache
+lng_no_template="Leider kein solches Template vorhanden."
+lng_no_template_given="Leider kein Template angegeben."
+lng_no_date="Leider kein relatives Datum angegben. (yyyy-mm-dd)"
+lng_date_format="Bitte an folgendes Datumsformat halten: (yyyy-mm-dd)"
+lng_number_tasks=" Aufgaben hinzugefügt."
+
+# Melde, wenn es das template nicht gibt.
+tmplt=${2}.txt
+[[ -z "${2}" ]] && echo ${lng_no_template_given} && exit 1
+[[ ! -f "${tmpltdir}/${tmplt}" ]] && echo ${lng_no_template} && exit 1
+shift
+# Alle Parameter abfangen, die da sind.
+
+# Erstelle das Verzeichnis, falls es nicht existiert.
+[[ ! -d ${tmpltdir} ]] && mkdir $tmpltdir
+
+while [ ! -z ${2} ] # so lange es parameter gibt, diese bearbeiten
+do
+    case ${2} in
+        "-duet")
+        startdate=$today # wenn -duet (due today) dann wird das startdatum auf heute gesetzt
+        shift
+        ;;
+        "-duer")
+        shift
+        [[ -z ${2} ]] && echo $lng_no_date && exit 1 # überprüfen ob ein Parameter übergeben wurdem
+        [[ ! ${2} =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] && echo $lng_date_format && exit 1 # entspricht der Parameter YYYY-mm-dd
+        # TOOO: date muss überprüfen ob es das Datum gibt. Als fehler bei 2020-04-31
+        startdate=${2} # wenn -duer (due relative) dann wird das startdatum auf den übergebenen parameter gestzt
+        shift
+        ;;
+        * )
+        append=$append" "${2}
+        shift
+        ;;
+    esac
+done
+
+function generatelineout () {
+    local return=$date # Lineout wird geüllt mit dem Datum
+    # echo "----"
+    # echo "${line}" | awk '{printf " "$0}'
+    # echo "++++"
+    [[ -z $faktor ]] && return="$return `printf "${line}" | awk '{printf " "$0}'`" # Wenn der Faktor leer ist, dann gibt die ganze Zeile aus.
+    [[ ! -z $faktor ]] && return="$return `printf "${line}" | awk '{$NF=""; printf " "$0}'`" # Wenn der Faktor nicht leer ist, dann gib alles, bis auf den letzten Datensatz aus.
+    return=`echo $return | sed 's/([A-Z])//'` # evtl. vorhandene Prio entfernen.
+    echo $return
+}
+
+i=0 # Zähler
+
+# Die tmplt-Datein zeilenweise einlesen.
+while read line
+do
+    date=$today
+
+    faktor=`echo $line | awk '$NF ~ /[+-][0-3]/ {print $NF}'` # Wenn der letzte Datensatz einen Tag ausweist, wird dieser in Faktor übernommen
+
+     # Wenn am Anfang ein [A-Z] steht, dann ...
+     # ... schreibe die Prio raus
+     # ... schreibe das datum
+     # ... schreibe den rest des tasks ohne datum
+     if [[ `echo $line | awk '$1 ~ /\([A-Z]{1}\)/ {print "true"}'` ]]
+     then
+         lineout=`printf ${line} | awk '{printf $0}'`
+         # printf ${line} | awk '{printf $0}'
+         lineout=${lineout}" "$(generatelineout)
+     else
+         lineout=$(generatelineout)
+     fi
+     lineout=${lineout}${append}
+sdölk
+    # Parameter die Übergeben werden kommen mit.
+    if  [[ ! -z ${startdate}  ]]
+    then
+        # faktor=`echo $line | awk '$NF ~ /[+-][1-3]/ {print $NF}'`
+        if [[ ! -z ${faktor} ]]
+        then
+            duedate=$(date -d ${startdate}${faktor}days +%Y-%m-%d)
+            lineout="${lineout} due:${duedate}"
+        else
+            lineout="${lineout} due:$startdate"
+        fi
+    fi
+    # lineout=`echo $lineout | sed -r 's/ +/ /g'`
+    echo $lineout >> ${TODO_FILE}
+    ((i=i+1))
+done < ${tmpltdir}/${tmplt}
+
+echo $i $lng_number_tasks
+
+
+
+# Überflüssige leerzeichen loswerden.
+
+
+# Todo
+# x. einlesen von templates, die als todo.txt im tmplt Verzeichnis liegen.
+#   x Erstellungsdatum mit geben.
+#   x append mitgeben.
+#       x Projekt mitgeben
+#   x Content mitgeben
+# 2. erstellen von den templates
+# 3. bearbeiten vom templates
+# x templates relativ zu heute und / oder zu einem Wunsch datum setzen.
+# 5. templates auswahliste erstellen.
+# x stattus meldung
+
+# sed gegen leerzeichen am ende
+# alle parameter erst in eine Varbiale geben und dann in die datei schreiben. schneller.
