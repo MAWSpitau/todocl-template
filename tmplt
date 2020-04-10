@@ -21,21 +21,26 @@
 # USAGE:
 # [[ $DEBUG ]] && echo ${DEBUG} "Nachricht"
 
-tmpltdir="$TODO_DIR/tmplt"  # Wo werden die templates gesucht un${TODO_FILE}d gespeichert.
-today=`date +%Y-%m-%d`      # Welcher tag ist heute?
+# Wo werden die templates gesucht und gespeichert.
+tmpltdir="$TODO_DIR/tmplt"
 
-# Sprache
+# Welcher tag ist heute?
+today=`date +%Y-%m-%d`
+
+# Sprache - hier können die einzelnen ausgaben angepasst werden.
 lng_no_template="Leider kein solches Template vorhanden."
 lng_no_template_given="Leider kein Template angegeben."
 lng_no_date="Leider kein relatives Datum angegben. (yyyy-mm-dd)"
 lng_date_format="Bitte an folgendes Datumsformat halten: (yyyy-mm-dd)"
 lng_number_tasks=" Aufgaben hinzugefügt."
 
-# Melde, wenn es das template nicht gibt.
 tmplt=${2}.txt
+# Hat der User ein template mitgegen?
 [[ -z "${2}" ]] && echo ${lng_no_template_given} && exit 1
+# Das template exisiert nicht.
 [[ ! -f "${tmpltdir}/${tmplt}" ]] && echo ${lng_no_template} && exit 1
 shift
+
 # Alle Parameter abfangen, die da sind.
 
 # Erstelle das Verzeichnis, falls es nicht existiert.
@@ -74,26 +79,30 @@ function generatelineout () {
     echo $return
 }
 
-i=0 # Zähler
+# Zähler für die Ausgabe, dass am Ende ausgegeben wird, wie viele tasks
+# hinzugefügt wurden.
+i=0
 
 # Die tmplt-Datein zeilenweise einlesen.
 while read line
 do
     date=$today
 
-    faktor=`echo $line | awk '$NF ~ /[+-][0-3]/ {print $NF}'` # Wenn der letzte Datensatz einen Tag ausweist, wird dieser in Faktor übernommen
+    # Wenn der letzte Datensatz einen Tag ausweist,
+    # wird dieser in Faktor übernommen
 
-     # Wenn am Anfang ein [A-Z] steht, dann ...
-     # ... schreibe die Prio raus
-     # ... schreibe das datum
-     # ... schreibe den rest des tasks ohne datum
-     if [[ `echo $line | awk '$1 ~ /\([A-Z]{1}\)/ {print "true"}'` ]]
-     then
-         lineout=`printf ${line} | awk '{printf $0}'`
-         # printf ${line} | awk '{printf $0}'
-         lineout=${lineout}" "$(generatelineout)
-     else
-         lineout=$(generatelineout)
+    faktor=`echo $line | awk '$NF ~ /[+-][0-3]/ {print $NF}'`
+    # Wenn am Anfang ein [A-Z] steht, dann ...
+    # ... schreibe die Prio raus
+    # ... schreibe das datum
+    # ... schreibe den rest des tasks ohne datum
+    if [[ `echo $line | awk '$1 ~ /\([A-Z]{1}\)/ {print "true"}'` ]]
+    then
+        lineout=`printf ${line} | awk '{printf $0}'`
+        # printf ${line} | awk '{printf $0}'
+        lineout=${lineout}" "$(generatelineout)
+    else
+        lineout=$(generatelineout)
      fi
      lineout=${lineout}${append}
 
@@ -111,9 +120,13 @@ do
     fi
     # lineout=`echo $lineout | sed -r 's/ +/ /g'`
     echo $lineout >> ${TODO_FILE}
+
+    # Zähler hochrechnen
     ((i=i+1))
 done < ${tmpltdir}/${tmplt}
 
+
+# ausgabe der anzahl von hinzugefügten tasks
 echo $i $lng_number_tasks
 
 
