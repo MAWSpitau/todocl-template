@@ -96,7 +96,7 @@ do
          lineout=$(generatelineout)
      fi
      lineout=${lineout}${append}
-sdölk
+
     # Parameter die Übergeben werden kommen mit.
     if  [[ ! -z ${startdate}  ]]
     then
