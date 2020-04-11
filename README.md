@@ -9,7 +9,9 @@ This should be a small script for using **templates** for todo-cli
 
 ## how to use
 
-> $ todo.sh tmplt <yourtemplate> [-duet|-duer] [YYYY-mm-dd] [optional parameter]
+```
+$ todo.sh tmplt <yourtemplate> [-duet|-duer] [YYYY-mm-dd] [optional parameter]
+```
 
 ### <yourtemplate>
 
