@@ -5,12 +5,12 @@
 #
 #         USAGE: todo.sh tmplt
 #
-#   DESCRIPTION: Enables templates for recurring tasks in todo.sh
+#   DESCRIPTION: enables templates in todo.txt
 #
 #  REQUIREMENTS: ---
 #          BUGS:
 #        AUTHOR: Marcel Spitau (mawspitau@gmail.com)
-#     COPYRIGHT: 2020 Paul Mansfield
+#     COPYRIGHT: 2020 Marcel Spitau
 #       LICENSE: WTFPL - http://www.wtfpl.net/about/
 #       CREATED: 2020-04-07
 #      REVISION:  ---
