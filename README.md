@@ -35,10 +35,10 @@ $todo.sh tmplt
 - You can choose when the tasks due-date is in two ways.
   - **-duet**: due today
     - The tasks date default is **today**.
-    - you can give a startdate realtive to today by giving a task a **+d** or a **-d** at the last option of your template task.
+    - You can give a startdate realtive to today by giving a task a **+d** or a **-d** at the last option of your template task.
   - **-duer**: due relative
     - The tasks date default is the date your give after **-due** in this format: yyyy-mm-dd.
-    -
+    - You can give a startdate realtive to the startdate by giving a task a **+d** or a **-d** at the last option of your template task.
 
 #### Example
 ```
@@ -50,4 +50,74 @@ $todo.sh tmplt
    |  |         |--- this is a project
    |  |--- the task
    |--- the priority
+```
+
+## Example template
+
+### this is my testing tempalate
+
+```
+(Z) minus 1 +loeschmich -1
+(Z) minus 2 +loeschmich -2
+(Z) minus 3 +loeschmich -3
+(Z) nix +loeschmich
+(Z) null 1 +loeschmich +0
+(Z) plus 1 +loeschmich +1
+(Z) plus 2 +loeschmich +2
+(Z) plus 3 +loeschmich +3
+```
+
+### Different Calls
+
+    todo.sh tmplt 001
+
+```
+(Z) 2020-04-12 minus 1 +loeschmich
+(Z) 2020-04-12 minus 2 +loeschmich
+(Z) 2020-04-12 minus 3 +loeschmich
+(Z) 2020-04-12 nix +loeschmich
+(Z) 2020-04-12 null 1 +loeschmich
+(Z) 2020-04-12 plus 1 +loeschmich
+(Z) 2020-04-12 plus 2 +loeschmich
+(Z) 2020-04-12 plus 3 +loeschmich
+```
+
+    todo.sh tmplt 001 -duet
+
+```
+(Z) 2020-04-12 minus 1 +loeschmich due:2020-04-11
+(Z) 2020-04-12 minus 2 +loeschmich due:2020-04-10
+(Z) 2020-04-12 minus 3 +loeschmich due:2020-04-09
+(Z) 2020-04-12 nix +loeschmich due:2020-04-12
+(Z) 2020-04-12 null 1 +loeschmich due:2020-04-12
+(Z) 2020-04-12 plus 1 +loeschmich due:2020-04-13
+(Z) 2020-04-12 plus 2 +loeschmich due:2020-04-14
+(Z) 2020-04-12 plus 3 +loeschmich due:2020-04-15
+
+```
+
+    todo.sh tmplt 001 -duer 2023-02-01
+
+```
+(Z) 2020-04-12 minus 1 +loeschmich due:2023-01-31
+(Z) 2020-04-12 minus 2 +loeschmich due:2023-01-30
+(Z) 2020-04-12 minus 3 +loeschmich due:2023-01-29
+(Z) 2020-04-12 nix +loeschmich due:2023-02-01
+(Z) 2020-04-12 null 1 +loeschmich due:2023-02-01
+(Z) 2020-04-12 plus 1 +loeschmich due:2023-02-02
+(Z) 2020-04-12 plus 2 +loeschmich due:2023-02-03
+(Z) 2020-04-12 plus 3 +loeschmich due:2023-02-04
+```
+
+    todo.sh tmplt 001 -duet +testproject @testcontext
+
+```
+(Z) 2020-04-12 minus 1 +loeschmich +testproject @testcontext due:2020-04-11
+(Z) 2020-04-12 minus 2 +loeschmich +testproject @testcontext due:2020-04-10
+(Z) 2020-04-12 minus 3 +loeschmich +testproject @testcontext due:2020-04-09
+(Z) 2020-04-12 nix +loeschmich +testproject @testcontext due:2020-04-12
+(Z) 2020-04-12 null 1 +loeschmich +testproject @testcontext due:2020-04-12
+(Z) 2020-04-12 plus 1 +loeschmich +testproject @testcontext due:2020-04-13
+(Z) 2020-04-12 plus 2 +loeschmich +testproject @testcontext due:2020-04-14
+(Z) 2020-04-12 plus 3 +loeschmich +testproject @testcontext due:2020-04-15
 ```
