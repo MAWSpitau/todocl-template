@@ -9,6 +9,7 @@ This should be a small script for using **templates** for [todo-cli](https://git
 
 ```
 wget https://raw.githubusercontent.com/MAWSpitau/todotxt-cli-template/master/tmplt
+chmod u+x tmplt
 ```
 The action is installed.
 
