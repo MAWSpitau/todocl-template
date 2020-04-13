@@ -16,13 +16,31 @@
 #      REVISION:  ---
 #===============================================================================
 
+# Wo werden die templates gesucht und gespeichert.
+tmpltdir="$TODO_DIR/tmplt"
+
+if [ "${1}" = "usage" ]
+then
+    echo " "
+    echo " "
+    echo " "
+    echo "##### Using templates #####"
+    echo "  usage:"
+    echo "    todo.sh tmplt <template> [-duet|-duer yyy-mm-dd] [+protjekt @contexts stuff] [-|+d]"
+    echo " "
+    echo "    templates should be found in: $TODO_DIR/tmplt"
+    echo "    -|+d plus oder minus day referrign to the given date:"
+    echo "      -duet: today is the date, the due-date will be based on."
+    echo "      -duer yyy-mm-dd: the given date is the date, the due-date will be based on."
+    exit 0
+fi
+
+
 # Hier auskommentieren für debugging.
 # DEBUG="=====>>>- DEBUGGING:" && clear && TODO_FILE="./loeschmich.txt"
 # USAGE:
 # [[ $DEBUG ]] && echo ${DEBUG} "Nachricht"
 
-# Wo werden die templates gesucht und gespeichert.
-tmpltdir="$TODO_DIR/tmplt"
 
 # Welcher tag ist heute?
 today=`date +%Y-%m-%d`
